@@ -1,26 +1,17 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
+<script setup>
+import { defineAsyncComponent } from 'vue';
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+const Header = defineAsyncComponent(() => import('@/components/BaseHeader.vue'));
+const Footer = defineAsyncComponent(() => import('@/components/BaseFooter.vue'));
 </script>
-
+<template>
+    <v-app>
+        <Header />
+        <v-main>
+            <router-view />
+        </v-main>
+        <Footer />
+    </v-app>
+</template>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
