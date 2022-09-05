@@ -6,7 +6,7 @@ const state = {
 };
 const getters = {};
 const mutations = {
-// creates SET_* functions
+    // creates SET_* functions
     ...make.mutations(state),
     startLoading(state) {
         state.loading = true;
@@ -24,7 +24,10 @@ const actions = {
     async getNewsHeadlines() {
         const result = await myAxios
             .get(`${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
-            .then((response) => response.data.articles || null)
+            .then((response) => {
+                console.log(response.data.articles);
+                return response.data.articles || null;
+            })
             .catch((error) => {
                 console.log(error.message);
             });

@@ -6,7 +6,7 @@ const OneColumn = defineAsyncComponent(() => import('@/layouts/OneColumn.vue'));
 const NewsCard = defineAsyncComponent(() => import('@/components/NewsCard.vue'));
 
 const store = useStore();
-const newsList = ref(null);
+const newsList = ref([]);
 
 onBeforeMount(async () => {
     await store
@@ -15,27 +15,29 @@ onBeforeMount(async () => {
             newsList.value = response;
         });
 });
-
 </script>
 
 <template>
     <OneColumn>
-        <h1> Headlines</h1>
-        <v-container class="bg-surface-variant">
-            <v-row no-gutters>
-                <v-col
-                    v-for="(news) in newsList"
-                    :key="news.title"
-                    cols="12"
-                    sm="4"
-                >
-                    <NewsCard
-                        :date="date"
-                        :title="news.title"
-                        :content="news.content"
-                    />
-                </v-col>
-            </v-row>
-        </v-container>
+        <h2 class="text-h2">Headlines</h2>
+        <v-row v-if="newsList">
+            <v-col
+                v-for="(news, index) in newsList"
+                :key="news.source.id"
+                cols="1"
+                sm="3"
+                class="dev"
+            >
+                <NewsCard
+                    :v-if="news.urlToImage"
+                    :date="news.publishedAt"
+                    :title="news.title"
+                    :content="news.content"
+                    :image="news.urlToImage"
+                    :index="index"
+                    class="dev "
+                />
+            </v-col>
+        </v-row>
     </OneColumn>
 </template>
