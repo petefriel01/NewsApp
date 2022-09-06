@@ -1,9 +1,12 @@
 <script setup>
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, computed } from 'vue';
 
 const NewsCardImage = defineAsyncComponent(() => import('@/components/NewsCardImage.vue'));
 
-defineProps({
+const emit = defineEmits(['item-clicked']);
+const openDialog = (title, index) => emit('item-clicked', { title, index });
+
+const props = defineProps({
     date: {
         type: String,
         default: 'This is the author',
@@ -30,6 +33,11 @@ defineProps({
     },
 });
 
+const inputVal = computed({
+    get: () => props.title,
+    set: (value) => emit('update:modelValue', value),
+});
+
 </script>
 <template>
     <v-card class="d-flex flex-column" height="100%">
@@ -43,7 +51,12 @@ defineProps({
                 </v-btn>
             </v-toolbar>
             <v-card-subtitle class="mt-auto">{{date}}</v-card-subtitle>
-            <v-card-title>{{title}}</v-card-title>
+            <v-card-title>
+                <v-text-field
+                    outlined
+                    v-model="inputVal"
+                ></v-text-field>
+            </v-card-title>
             <v-card-text
                 v-if="Math.abs(index % 2) == 0"
                 v-html="$manatal.truncate(content)">
@@ -54,6 +67,12 @@ defineProps({
                     params: { article: $manatal.title(title) }
                 }">
                     Read More</router-link>
+                <v-btn
+                    color="primary"
+                    @click="openDialog(title, index)"
+                >
+                    Open Dialog
+                </v-btn>
             </v-card-actions>
         </component>
     </v-card>
@@ -61,6 +80,6 @@ defineProps({
 
 <style>
     .dev{
-    border: solid 1px red;
+        border: solid 1px red;
     }
 </style>

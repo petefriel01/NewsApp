@@ -21,7 +21,7 @@ watch(
 <template>
     <v-app-bar app class="bg-transparent" elevation="0">
         <v-container>
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row dev">
                 <h1 class="text-h3" v-if="headlines">News</h1>
                 <router-link :to="{name: 'NewsIndex'}" v-else>Back</router-link>
             </div>
