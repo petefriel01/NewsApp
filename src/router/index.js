@@ -7,11 +7,13 @@ const routes = [
         path: '/',
         name: 'NewsIndex',
         component: NewsIndex,
+        meta: { showLogo: true },
     },
     {
         path: '/news/:article?',
         name: 'NewsShow',
         component: NewsShow,
+        meta: { showLogo: false },
     },
 ];
 

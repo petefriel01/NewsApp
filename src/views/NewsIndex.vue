@@ -19,7 +19,7 @@ onBeforeMount(async () => {
 
 <template>
     <OneColumn>
-        <h2 class="text-h2">Headlines</h2>
+        <h2 class="text-h4">Headlines</h2>
         <v-row v-if="newsList">
             <v-col
                 v-for="(news, index) in newsList"

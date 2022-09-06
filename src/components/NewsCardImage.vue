@@ -13,7 +13,7 @@ defineProps({
         height="100%"
         width="100%"
         cover
-        class="text-white d-flexX align-endX"
+        class="text-white"
     >
         <slot />
     </v-img>

@@ -25,7 +25,6 @@ onBeforeMount(async () => {
 </script>
 <template>
     <OneColumn>
-        <h2 class="text-h2">News Detail</h2>
         <NewsShowCard />
     </OneColumn>
 </template>
