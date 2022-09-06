@@ -34,8 +34,9 @@ onBeforeMount(async () => {
                     :title="news.title"
                     :content="news.content"
                     :image="news.urlToImage"
+                    :url="news.url"
                     :index="index"
-                    class="dev "
+                    class="dev"
                 />
             </v-col>
         </v-row>

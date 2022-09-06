@@ -9,15 +9,10 @@ const routes = [
         component: NewsIndex,
     },
     {
-        path: '/news/',
+        path: '/news/:article?',
         name: 'NewsShow',
         component: NewsShow,
     },
-    // {
-    //     path: '/news/:newsid',
-    //     name: 'NewsShow',
-    //     component: NewsShow,
-    // },
 ];
 
 const router = createRouter({

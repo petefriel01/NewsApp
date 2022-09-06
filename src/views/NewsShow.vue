@@ -1,10 +1,31 @@
-<template>
-    <p>detail view</p>
-</template>
+<script setup>
+import {
+    defineAsyncComponent, onBeforeMount,
+} from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-<script>
-export default {};
+const OneColumn = defineAsyncComponent(() => import('@/layouts/OneColumn.vue'));
+const NewsShowCard = defineAsyncComponent(() => import('@/components/NewsShowCard.vue'));
+
+const store = useStore();
+
+const {
+    params: { article },
+} = useRoute();
+
+onBeforeMount(async () => {
+    await store
+        .dispatch('content/getNewsArticle', { article })
+        .then((response) => {
+            store.dispatch('content/setActiveStory', response[0]);
+        });
+});
+
 </script>
-
-<style>
-</style>
+<template>
+    <OneColumn>
+        <h2 class="text-h2">News Detail</h2>
+        <NewsShowCard />
+    </OneColumn>
+</template>

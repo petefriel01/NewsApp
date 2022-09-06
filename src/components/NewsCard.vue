@@ -18,6 +18,10 @@ defineProps({
     },
     image: {
         type: String,
+        default: 'This is the image',
+    },
+    url: {
+        type: String,
         default: 'This is the url',
     },
     index: {
@@ -28,10 +32,8 @@ defineProps({
 
 </script>
 <template>
-
     <v-card class="d-flex flex-column" height="100%">
         <component :is="Math.abs(index % 2) != 0 ? NewsCardImage : 'v-fragment'" :image="image">
-
             <v-toolbar
                 color="transparent"
             >
@@ -40,25 +42,25 @@ defineProps({
                     <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
             </v-toolbar>
-
-            <v-spacer></v-spacer>
-
             <v-card-subtitle class="mt-auto">{{date}}</v-card-subtitle>
             <v-card-title>{{title}}</v-card-title>
-            <v-card-text v-if="Math.abs(index % 2) == 0" v-html="content"></v-card-text>
+            <v-card-text
+                v-if="Math.abs(index % 2) == 0"
+                v-html="$manatal.truncate(content)">
+            </v-card-text>
             <v-card-actions>
-                <v-btn variant="outlined">
-                    Button
-                </v-btn>
+                <router-link :to="{
+                    name: 'NewsShow',
+                    params: { article: $manatal.title(title) }
+                }">
+                    Read More</router-link>
             </v-card-actions>
-
         </component>
     </v-card>
-
 </template>
 
-        <style>
-            .dev{
-            border: solid 1px red;
-            }
-        </style>
+<style>
+    .dev{
+    border: solid 1px red;
+    }
+</style>

@@ -1,12 +1,10 @@
 <script setup>
-
 defineProps({
     image: {
         type: String,
         default: 'This is the url',
     },
 });
-
 </script>
 <template>
     <v-img
@@ -15,10 +13,8 @@ defineProps({
         height="100%"
         width="100%"
         cover
-        class="text-white d-flex align-end"
+        class="text-white d-flexX align-endX"
     >
-        <div class="dev" >
-            <slot />
-        </div>
+        <slot />
     </v-img>
 </template>
