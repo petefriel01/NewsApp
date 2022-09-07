@@ -10,7 +10,7 @@ const overlay = ref(true);
             <v-progress-circular
                 indeterminate
                 size="64"
-                color="primary"
+                color="green"
             ></v-progress-circular>
         </v-overlay>
     </div>

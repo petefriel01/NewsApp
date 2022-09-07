@@ -45,7 +45,9 @@ const dynamicTitle = computed({
                 color="transparent"
             >
                 <v-spacer />
-                <v-icon class="ma-4">mdi-newspaper-variant-outline</v-icon>
+                <v-icon v-if="Math.abs(index % 2) == 0"
+                        class="ma-4">mdi-newspaper-variant-outline
+                </v-icon>
             </v-toolbar>
             <v-card-subtitle class="mt-auto">{{source}}</v-card-subtitle>
             <v-card-title class="text-wrap font-weight-bold">
@@ -72,6 +74,7 @@ const dynamicTitle = computed({
                 >
                     Edit Title
                 </v-btn>
+
             </v-card-actions>
         </component>
     </v-card>

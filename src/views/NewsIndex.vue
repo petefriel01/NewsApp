@@ -1,6 +1,6 @@
 <script setup>
 import {
-    defineAsyncComponent, onBeforeMount, ref, watch,
+    defineAsyncComponent, onBeforeMount, ref, watch, computed,
 } from 'vue';
 import { useStore } from 'vuex';
 import debounce from 'lodash/debounce';
@@ -21,6 +21,8 @@ const searchText = ref();
 const sources = ref();
 const loading = ref(false);
 
+const error = computed(() => store.get('content/error'));
+
 const getSourceList = async () => {
     await store
         .dispatch('content/getNewsSources')
@@ -35,6 +37,16 @@ const filterHeadlines = async (source) => {
         .dispatch('content/getNewsBySource', { source })
         .then((response) => {
             newsList.value = response;
+            loading.value = false;
+        });
+};
+
+const showError = async () => {
+    loading.value = true;
+    await store
+        .dispatch('content/getNewsError')
+        .then(() => {
+            newsList.value = [];
             loading.value = false;
         });
 };
@@ -102,7 +114,7 @@ onBeforeMount(async () => {
 
 <template>
     <OneColumn>
-        <v-row  class="d-flex align-center dev">
+        <v-row class="d-flex align-center dev">
             <v-col>
                 <h2 class="text-h4 dev">Headlines</h2>
             </v-col>
@@ -115,7 +127,7 @@ onBeforeMount(async () => {
                         <v-btn
                             v-bind="props"
                         >
-                            FILTER
+                            Filter
                         </v-btn>
                     </template>
                     <v-list>
@@ -130,10 +142,13 @@ onBeforeMount(async () => {
                     </v-list>
                 </v-menu>
                 <v-btn :to="{name: 'NewsHistory'}" class="mx-3">History</v-btn>
-                <v-btn :to="{name: 'NewsHistory'}">Error</v-btn>
+                <v-btn @click="showError()">Error</v-btn>
             </v-col>
         </v-row>
         <v-divider class="my-8"></v-divider>
+        <v-alert type="warning" v-if="error">
+            {{error}}
+        </v-alert>
         <v-row v-if="newsList">
             <v-col
                 v-for="(news, index) in newsList"

@@ -8,6 +8,7 @@ const state = {
         active: {},
     },
     history: [],
+    error: '',
 };
 const getters = {};
 const mutations = {
@@ -20,6 +21,9 @@ const mutations = {
     },
     saveHistory(state, headline) {
         state.history.unshift(headline);
+    },
+    setError(state, error) {
+        state.error = error;
     },
 };
 
@@ -91,6 +95,20 @@ const actions = {
                 console.log(error.message);
             });
         return news;
+    },
+    async getNewsError({ commit }) {
+        const error = await myAxios
+            .get(
+                `${process.env.VUE_APP_NEWS_API_URL}/sources?&apiKey`,
+            )
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                commit('setError', error.response.data.message || error.message);
+                console.log(error.response.data.message || error.message);
+            });
+        return error;
     },
 };
 
