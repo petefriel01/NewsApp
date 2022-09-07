@@ -57,6 +57,9 @@ onBeforeMount(async () => {
             <v-col>
                 <h2 class="text-h4 dev mb-6">Headlines</h2>
             </v-col>
+            <v-col>
+                <router-link :to="{name: 'NewsHistory'}">History</router-link>
+            </v-col>
         </v-row>
         <v-row v-if="newsList">
             <v-col

@@ -7,6 +7,7 @@ const state = {
     stories: {
         active: {},
     },
+    history: [],
 };
 const getters = {};
 const mutations = {
@@ -24,8 +25,11 @@ const mutations = {
     setNewsList(state, news) {
         state.news = news;
     },
+    saveHistory(state, headline) {
+        state.history.unshift(headline);
+    },
 };
-    // https://newsapi.org/v2/top-headlines?country=us&apiKey=099148be22804e849a0c6fe022b7cf5e
+
 const actions = {
     ...make.actions(state),
     setActiveStory({ commit }, story) {
@@ -43,15 +47,14 @@ const actions = {
             });
         return headlines;
     },
-    async getNewsArticle(_, data) {
+    async getNewsArticle({ commit }, data) {
         const news = await myAxios
             .get(`${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
             .then((response) => {
                 const newsStory = response.data.articles.filter(
                     (item) => formatTitle(item.title) === data.article,
                 );
-                console.log(newsStory);
-                // commit('setActiveStory', newsStory);
+                commit('saveHistory', newsStory[0].title);
                 return newsStory || null;
             })
             .catch((error) => {

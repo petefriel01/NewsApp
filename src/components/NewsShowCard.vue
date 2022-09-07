@@ -4,7 +4,6 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const activeStory = computed(() => store.get('content/stories@active'));
-
 </script>
 <template>
 
