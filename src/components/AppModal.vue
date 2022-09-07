@@ -15,6 +15,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    maxLength: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const inputVal = computed({
@@ -41,6 +45,9 @@ watch(() => props.visible, (selection) => {
                     v-model="inputVal"
                 ></v-text-field>
             </v-card-text>
+            <v-alert type="error" v-if="maxLength">
+                max length(255 characters) exceeded
+            </v-alert>
             <v-card-actions>
                 <v-btn color="primary" block @click="handleClick()">Close Dialog</v-btn>
             </v-card-actions>

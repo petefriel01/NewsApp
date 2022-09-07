@@ -11,11 +11,13 @@ const newsList = ref([]);
 const isVisible = ref(false);
 const newsTitle = ref();
 const newsTitleId = ref();
+const isMaxLength = ref(false);
 
 const handleDialog = ({ title, index }) => {
     isVisible.value = !isVisible.value;
     newsTitle.value = title;
     newsTitleId.value = index;
+    isMaxLength.value = false;
 };
 
 const closeDialog = () => {
@@ -26,6 +28,11 @@ const closeDialog = () => {
 // using array index as indentifier
 const updateTitle = (newTitle) => {
     // return new array with new title
+    if (newTitle.length > 255) {
+        isMaxLength.value = true;
+        return;
+    }
+    isMaxLength.value = false;
     newsList.value = newsList.value.map((item, index) => {
         const temp = { ...item };
         if (index === newsTitleId.value) {
@@ -75,6 +82,7 @@ onBeforeMount(async () => {
     </OneColumn>
     <AppModal
         :visible="isVisible"
+        :maxLength="isMaxLength"
         @item-clicked="closeDialog"
         @update:model-value="updateTitle"
         :title="newsTitle"/>

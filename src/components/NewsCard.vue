@@ -50,7 +50,7 @@ const dynamicTitle = computed({
                 </v-btn>
             </v-toolbar>
             <v-card-subtitle class="mt-auto">{{date}}</v-card-subtitle>
-            <v-card-title>
+            <v-card-title class="text-wrap">
                 {{dynamicTitle}}
             </v-card-title>
             <v-card-text
