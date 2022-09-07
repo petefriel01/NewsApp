@@ -3,9 +3,11 @@ import {
     defineAsyncComponent, onBeforeMount, ref, watch,
 } from 'vue';
 import { useStore } from 'vuex';
+import debounce from 'lodash/debounce';
 
 const OneColumn = defineAsyncComponent(() => import('@/layouts/OneColumn.vue'));
 const AppModal = defineAsyncComponent(() => import('@/components/AppModal.vue'));
+const AppSpinner = defineAsyncComponent(() => import('@/components/AppSpinner.vue'));
 const NewsCard = defineAsyncComponent(() => import('@/components/NewsCard.vue'));
 const SearchWidget = defineAsyncComponent(() => import('@/components/SearchWidget.vue'));
 
@@ -16,11 +18,10 @@ const newsTitle = ref();
 const newsTitleId = ref();
 const isMaxLength = ref(false);
 const searchText = ref();
-
 const sources = ref();
+const loading = ref(false);
 
 const getSourceList = async () => {
-    console.log('getNewsSources');
     await store
         .dispatch('content/getNewsSources')
         .then((response) => {
@@ -29,7 +30,6 @@ const getSourceList = async () => {
 };
 
 const filterHeadlines = async (source) => {
-    console.log(source);
     await store
         .dispatch('content/getNewsBySource', { source })
         .then((response) => {
@@ -72,7 +72,7 @@ const handleSearch = (value) => {
 
 watch(
     () => searchText.value,
-    async (query) => {
+    debounce(async (query) => {
         try {
             console.log(query);
             await store
@@ -83,14 +83,16 @@ watch(
         } catch (e) {
             console.log(e);
         }
-    },
+    }, 1000),
 );
 
 onBeforeMount(async () => {
+    loading.value = true;
     await store
         .dispatch('content/getNewsHeadlines')
         .then((response) => {
             newsList.value = response;
+            loading.value = false;
         });
     getSourceList();
 });
@@ -151,6 +153,7 @@ onBeforeMount(async () => {
             </v-col>
         </v-row>
     </OneColumn>
+    <AppSpinner v-if="loading"/>
     <AppModal
         :visible="isVisible"
         :maxLength="isMaxLength"
