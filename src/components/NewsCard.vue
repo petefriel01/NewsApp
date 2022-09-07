@@ -33,9 +33,8 @@ const props = defineProps({
     },
 });
 
-const inputVal = computed({
+const dynamicTitle = computed({
     get: () => props.title,
-    set: (value) => emit('update:modelValue', value),
 });
 
 </script>
@@ -52,10 +51,7 @@ const inputVal = computed({
             </v-toolbar>
             <v-card-subtitle class="mt-auto">{{date}}</v-card-subtitle>
             <v-card-title>
-                <v-text-field
-                    outlined
-                    v-model="inputVal"
-                ></v-text-field>
+                {{dynamicTitle}}
             </v-card-title>
             <v-card-text
                 v-if="Math.abs(index % 2) == 0"

@@ -13,28 +13,23 @@ const newsTitle = ref();
 const newsTitleId = ref();
 
 const handleDialog = ({ title, index }) => {
-    console.log(title, index);
-    // catch the emitted title
     isVisible.value = !isVisible.value;
     newsTitle.value = title;
     newsTitleId.value = index;
 };
 
+const closeDialog = () => {
+    isVisible.value = !isVisible.value;
+};
+
 // need function to update newsList.value with emitted value
 // using array index as indentifier
 const updateTitle = (newTitle) => {
-    console.log(`newTitle${newTitle}`);
-    console.log(`newsTitleId${newsTitleId.value}`);
     // return new array with new title
     newsList.value = newsList.value.map((item, index) => {
-        // if (index === newsTitleId.value) {
-        //     console.log(item);
-        // }
-        // return item;
         const temp = { ...item };
         if (index === newsTitleId.value) {
             temp.title = newTitle;
-            console.log(temp.title);
         }
         return temp;
     });
@@ -45,7 +40,6 @@ onBeforeMount(async () => {
         .dispatch('content/getNewsHeadlines')
         .then((response) => {
             newsList.value = response;
-            console.log(newsList.value);
         });
 });
 </script>
@@ -81,7 +75,7 @@ onBeforeMount(async () => {
     </OneColumn>
     <AppModal
         :visible="isVisible"
-        @item-clicked="handleDialog"
+        @item-clicked="closeDialog"
         @update:model-value="updateTitle"
         :title="newsTitle"/>
 </template>
