@@ -1,10 +1,13 @@
 <script setup>
-import { defineAsyncComponent, onBeforeMount, ref } from 'vue';
+import {
+    defineAsyncComponent, onBeforeMount, ref, watch,
+} from 'vue';
 import { useStore } from 'vuex';
 
 const OneColumn = defineAsyncComponent(() => import('@/layouts/OneColumn.vue'));
-const NewsCard = defineAsyncComponent(() => import('@/components/NewsCard.vue'));
 const AppModal = defineAsyncComponent(() => import('@/components/AppModal.vue'));
+const NewsCard = defineAsyncComponent(() => import('@/components/NewsCard.vue'));
+const SearchWidget = defineAsyncComponent(() => import('@/components/SearchWidget.vue'));
 
 const store = useStore();
 const newsList = ref([]);
@@ -12,6 +15,7 @@ const isVisible = ref(false);
 const newsTitle = ref();
 const newsTitleId = ref();
 const isMaxLength = ref(false);
+const searchText = ref();
 
 const sources = ref();
 
@@ -46,8 +50,8 @@ const closeDialog = () => {
 
 // need function to update newsList.value with emitted value
 // using array index as indentifier
+// return new array with new title
 const updateTitle = (newTitle) => {
-    // return new array with new title
     if (newTitle.length > 255) {
         isMaxLength.value = true;
         return;
@@ -61,6 +65,26 @@ const updateTitle = (newTitle) => {
         return temp;
     });
 };
+
+const handleSearch = (value) => {
+    searchText.value = value;
+};
+
+watch(
+    () => searchText.value,
+    async (query) => {
+        try {
+            console.log(query);
+            await store
+                .dispatch('content/getNewsBySearch', { query })
+                .then((response) => {
+                    newsList.value = response;
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    },
+);
 
 onBeforeMount(async () => {
     await store
@@ -80,6 +104,9 @@ onBeforeMount(async () => {
             </v-col>
             <v-col>
                 <router-link :to="{name: 'NewsHistory'}">History</router-link>
+            </v-col>
+            <v-col>
+                <SearchWidget @update:model-value="handleSearch"/>
             </v-col>
             <v-col>
                 <v-menu>
@@ -110,7 +137,6 @@ onBeforeMount(async () => {
                 :key="`news-list-${index}`"
                 cols="1"
                 sm="3"
-                class="dev"
             >
                 <NewsCard
                     :v-if="news.urlToImage"
@@ -121,7 +147,6 @@ onBeforeMount(async () => {
                     :url="news.url"
                     :index="index"
                     @item-clicked="handleDialog"
-                    class="dev"
                 />
             </v-col>
         </v-row>

@@ -73,9 +73,3 @@ const dynamicTitle = computed({
         </component>
     </v-card>
 </template>
-
-<style>
-    .dev{
-        border: solid 1px red;
-    }
-</style>

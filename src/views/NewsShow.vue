@@ -15,11 +15,13 @@ const {
 } = useRoute();
 
 onBeforeMount(async () => {
-    await store
-        .dispatch('content/getNewsArticle', { article })
-        .then((response) => {
-            store.dispatch('content/setActiveStory', response[0]);
-        });
+    if (article) {
+        await store
+            .dispatch('content/getNewsArticle', { article })
+            .then((response) => {
+                store.dispatch('content/setActiveStory', response[0]);
+            });
+    }
 });
 
 </script>

@@ -49,10 +49,7 @@ const actions = {
     async getNewsSources() {
         const headlines = await myAxios
             .get(`${process.env.VUE_APP_NEWS_API_URL}/sources?apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
-            .then((response) => {
-                console.log(response.data.sources);
-                return response.data.sources || null;
-            })
+            .then((response) => response.data.sources || null)
             .catch((error) => {
                 console.log(error.message);
             });
@@ -87,14 +84,14 @@ const actions = {
             });
         return news;
     },
-    async getNewsBySearch(_, data, { commit }) {
+    async getNewsBySearch(_, data) {
         const news = await myAxios
             .get(
-                `${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&q=${data.searchText}&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`,
+                `${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&q=${data.query}&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`,
             )
             .then((response) => {
-                commit('setNews', response.data);
-                return response.data.Search || null;
+                console.log(response);
+                return response.data.articles || null;
             })
             .catch((error) => {
                 console.log(error.message);
