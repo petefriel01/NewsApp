@@ -1,0 +1,31 @@
+{
+	"root": true,
+	"env": {
+		"node": true
+	},
+	"extends": [
+		"plugin:vue/vue3-essential",
+		"eslint:recommended",
+		"@vue/airbnb"
+	],
+	"parserOptions": {
+		"parser": "@babel/eslint-parser"
+	},
+	"rules": {
+		"no-shadow": 0,
+		"vue/no-v-html": 0,
+		"no-trailing-spaces": 1,
+		"indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+		"vue/html-indent": [
+			"error",
+			4
+		],
+		"vue/multi-word-component-names": 0
+	}
+}

@@ -15,7 +15,6 @@ const activeStory = computed(() => store.get('content/stories@active'));
             >
                 <v-img
                     :lazy-src="activeStory.urlToImage"
-                    :src="activeStory.urlToImage"
                     class="align-end text-white"
                     height="50%"
                     cover

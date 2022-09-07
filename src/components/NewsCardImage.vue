@@ -2,14 +2,14 @@
 defineProps({
     image: {
         type: String,
-        default: 'This is the url',
+        default: '',
     },
 });
 </script>
 <template>
     <v-img
+        v-if="image"
         :lazy-src="image"
-        :src="image"
         height="100%"
         width="100%"
         cover

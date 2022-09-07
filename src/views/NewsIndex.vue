@@ -13,6 +13,26 @@ const newsTitle = ref();
 const newsTitleId = ref();
 const isMaxLength = ref(false);
 
+const sources = ref();
+
+const getSourceList = async () => {
+    console.log('getNewsSources');
+    await store
+        .dispatch('content/getNewsSources')
+        .then((response) => {
+            sources.value = response;
+        });
+};
+
+const filterHeadlines = async (source) => {
+    console.log(source);
+    await store
+        .dispatch('content/getNewsBySource', { source })
+        .then((response) => {
+            newsList.value = response;
+        });
+};
+
 const handleDialog = ({ title, index }) => {
     isVisible.value = !isVisible.value;
     newsTitle.value = title;
@@ -48,6 +68,7 @@ onBeforeMount(async () => {
         .then((response) => {
             newsList.value = response;
         });
+    getSourceList();
 });
 </script>
 
@@ -60,6 +81,28 @@ onBeforeMount(async () => {
             <v-col>
                 <router-link :to="{name: 'NewsHistory'}">History</router-link>
             </v-col>
+            <v-col>
+                <v-menu>
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                            color="primary"
+                            v-bind="props"
+                        >
+                            FILTER
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item
+                            v-for="(source, index) in sources"
+                            :key="index"
+                            :value="source.id"
+                            @click="filterHeadlines(source.id)"
+                        >
+                            <v-list-item-title>{{ source.name }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-col>
         </v-row>
         <v-row v-if="newsList">
             <v-col
@@ -71,7 +114,7 @@ onBeforeMount(async () => {
             >
                 <NewsCard
                     :v-if="news.urlToImage"
-                    :date="news.publishedAt"
+                    :source="news.source.name"
                     :title="news.title"
                     :content="news.content"
                     :image="news.urlToImage"

@@ -4,12 +4,6 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-// const items = ref([
-//     { text: 'Real-Time', icon: 'mdi-clock' },
-//     { text: 'Audience', icon: 'mdi-account' },
-//     { text: 'Conversions', icon: 'mdi-flag' },
-// ]);
-
 const history = computed({
     get: () => store.get('content/history'),
 });

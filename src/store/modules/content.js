@@ -11,22 +11,21 @@ const state = {
 };
 const getters = {};
 const mutations = {
-    // creates SET_* functions
     ...make.mutations(state),
     setActiveStory(state, story) {
         state.stories.active = story;
-    },
-    startLoading(state) {
-        state.loading = true;
-    },
-    stopLoading(state) {
-        state.loading = false;
     },
     setNewsList(state, news) {
         state.news = news;
     },
     saveHistory(state, headline) {
         state.history.unshift(headline);
+    },
+    startLoading(state) {
+        state.loading = true;
+    },
+    stopLoading(state) {
+        state.loading = false;
     },
 };
 
@@ -40,6 +39,32 @@ const actions = {
             .get(`${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
             .then((response) => {
                 commit('setNewsList', response.data.articles);
+                return response.data.articles || null;
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+        return headlines;
+    },
+    async getNewsSources() {
+        const headlines = await myAxios
+            .get(`${process.env.VUE_APP_NEWS_API_URL}/sources?apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
+            .then((response) => {
+                console.log(response.data.sources);
+                return response.data.sources || null;
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+        return headlines;
+    },
+    async getNewsBySource({ commit }, data) {
+        console.log(data.source);
+        const headlines = await myAxios
+            .get(`${process.env.VUE_APP_NEWS_API_URL}/top-headlines?sources=${data.source}&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`)
+            .then((response) => {
+                commit('setNewsList', response.data.articles);
+                console.log(response.data.articles);
                 return response.data.articles || null;
             })
             .catch((error) => {
@@ -68,7 +93,7 @@ const actions = {
                 `${process.env.VUE_APP_NEWS_API_URL}/top-headlines?country=us&q=${data.searchText}&apiKey=${process.env.VUE_APP_NEWS_API_KEY}`,
             )
             .then((response) => {
-                commit('setNews', response.data); // save state change
+                commit('setNews', response.data);
                 return response.data.Search || null;
             })
             .catch((error) => {

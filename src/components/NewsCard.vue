@@ -7,7 +7,7 @@ const emit = defineEmits(['item-clicked']);
 const openDialog = (title, index) => emit('item-clicked', { title, index });
 
 const props = defineProps({
-    date: {
+    source: {
         type: String,
         default: 'This is the author',
     },
@@ -40,7 +40,7 @@ const dynamicTitle = computed({
 </script>
 <template>
     <v-card class="d-flex flex-column" height="100%">
-        <component :is="Math.abs(index % 2) != 0 ? NewsCardImage : 'v-fragment'" :image="image">
+        <component :is="(Math.abs(index % 2) != 0) ? NewsCardImage : 'v-fragment'" :image="image">
             <v-toolbar
                 color="transparent"
             >
@@ -49,7 +49,7 @@ const dynamicTitle = computed({
                     <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-card-subtitle class="mt-auto">{{date}}</v-card-subtitle>
+            <v-card-subtitle class="mt-auto">{{source}}</v-card-subtitle>
             <v-card-title class="text-wrap">
                 {{dynamicTitle}}
             </v-card-title>
