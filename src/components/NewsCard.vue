@@ -45,12 +45,10 @@ const dynamicTitle = computed({
                 color="transparent"
             >
                 <v-spacer />
-                <v-btn icon>
-                    <v-icon>mdi-arrow-right</v-icon>
-                </v-btn>
+                <v-icon class="ma-4">mdi-newspaper-variant-outline</v-icon>
             </v-toolbar>
             <v-card-subtitle class="mt-auto">{{source}}</v-card-subtitle>
-            <v-card-title class="text-wrap">
+            <v-card-title class="text-wrap font-weight-bold">
                 {{dynamicTitle}}
             </v-card-title>
             <v-card-text
@@ -58,16 +56,21 @@ const dynamicTitle = computed({
                 v-html="$manatal.truncate(content)">
             </v-card-text>
             <v-card-actions>
-                <router-link :to="{
-                    name: 'NewsShow',
-                    params: { article: $manatal.title(title) }
-                }">
-                    Read More</router-link>
                 <v-btn
-                    color="primary"
+                    variant="outlined"
+                    size="x-small"
+                    :to="{
+                        name: 'NewsShow',
+                        params: { article: $manatal.title(title) }
+                    }">
+                    Read More</v-btn>
+                <v-btn
+                    variant="tonal"
+                    size="x-small"
+                    color="bg-grey lighten-4"
                     @click="openDialog(title, index)"
                 >
-                    Open Dialog
+                    Edit Title
                 </v-btn>
             </v-card-actions>
         </component>

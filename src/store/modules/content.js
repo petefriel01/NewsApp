@@ -21,12 +21,6 @@ const mutations = {
     saveHistory(state, headline) {
         state.history.unshift(headline);
     },
-    startLoading(state) {
-        state.loading = true;
-    },
-    stopLoading(state) {
-        state.loading = false;
-    },
 };
 
 const actions = {

@@ -7,6 +7,7 @@ defineProps({
 });
 </script>
 <template>
+
     <v-img
         v-if="image"
         :lazy-src="image"
@@ -15,6 +16,9 @@ defineProps({
         cover
         class="text-white"
     >
-        <slot />
+        <div style="background-color:rgba(2, 165, 80, 0.4);">
+            <slot />
+        </div>
     </v-img>
+
 </template>

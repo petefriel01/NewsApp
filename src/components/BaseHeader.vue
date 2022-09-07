@@ -19,11 +19,13 @@ watch(
 
 </script>
 <template>
-    <v-app-bar app class="bg-transparent" elevation="0">
+    <v-app-bar app class="bg-white" elevation="0">
         <v-container>
             <div class="d-flex flex-row">
-                <h1 class="text-h3" v-if="headlines">News</h1>
-                <router-link :to="{name: 'NewsIndex'}" v-else>Back</router-link>
+                <h1 class="text-h3 font-weight-black text-center"
+                    v-if="headlines">NEWS<span class="text-grey">TODAY</span>
+                </h1>
+                <v-btn :to="{name: 'NewsIndex'}" v-else>Back</v-btn>
             </div>
         </v-container>
     </v-app-bar>

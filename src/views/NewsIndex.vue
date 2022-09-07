@@ -30,10 +30,12 @@ const getSourceList = async () => {
 };
 
 const filterHeadlines = async (source) => {
+    loading.value = true;
     await store
         .dispatch('content/getNewsBySource', { source })
         .then((response) => {
             newsList.value = response;
+            loading.value = false;
         });
 };
 
@@ -48,9 +50,6 @@ const closeDialog = () => {
     isVisible.value = !isVisible.value;
 };
 
-// need function to update newsList.value with emitted value
-// using array index as indentifier
-// return new array with new title
 const updateTitle = (newTitle) => {
     if (newTitle.length > 255) {
         isMaxLength.value = true;
@@ -73,12 +72,15 @@ const handleSearch = (value) => {
 watch(
     () => searchText.value,
     debounce(async (query) => {
+        if (!searchText.value) return;
         try {
+            loading.value = true;
             console.log(query);
             await store
                 .dispatch('content/getNewsBySearch', { query })
                 .then((response) => {
                     newsList.value = response;
+                    loading.value = false;
                 });
         } catch (e) {
             console.log(e);
@@ -100,21 +102,17 @@ onBeforeMount(async () => {
 
 <template>
     <OneColumn>
-        <v-row>
+        <v-row  class="d-flex align-center dev">
             <v-col>
-                <h2 class="text-h4 dev mb-6">Headlines</h2>
+                <h2 class="text-h4 dev">Headlines</h2>
             </v-col>
-            <v-col>
-                <router-link :to="{name: 'NewsHistory'}">History</router-link>
-            </v-col>
-            <v-col>
+            <v-col class="d-flex align-center dev">
                 <SearchWidget @update:model-value="handleSearch"/>
             </v-col>
-            <v-col>
+            <v-col class="d-flex justify-end">
                 <v-menu>
                     <template v-slot:activator="{ props }">
                         <v-btn
-                            color="primary"
                             v-bind="props"
                         >
                             FILTER
@@ -131,8 +129,11 @@ onBeforeMount(async () => {
                         </v-list-item>
                     </v-list>
                 </v-menu>
+                <v-btn :to="{name: 'NewsHistory'}" class="mx-3">History</v-btn>
+                <v-btn :to="{name: 'NewsHistory'}">Error</v-btn>
             </v-col>
         </v-row>
+        <v-divider class="my-8"></v-divider>
         <v-row v-if="newsList">
             <v-col
                 v-for="(news, index) in newsList"
@@ -161,3 +162,9 @@ onBeforeMount(async () => {
         @update:model-value="updateTitle"
         :title="newsTitle"/>
 </template>
+
+<style scoped>
+/* .dev{
+    border: solid 1px red;
+} */
+</style>

@@ -8,9 +8,10 @@ const handleInput = (e) => {
 
 </script>
 <template>
-    <p>{{searchText}}</p>
     <v-text-field
-        outlined
+        solo
+        hide-details
+        label="Search for news articles"
         v-model="searchText"
         ref="searchInput"
         @input="handleInput"

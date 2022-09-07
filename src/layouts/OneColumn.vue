@@ -2,7 +2,7 @@
 
 </script>
 <template>
-    <v-container>
+    <v-container class="mb-14">
         <slot />
     </v-container>
 </template>
