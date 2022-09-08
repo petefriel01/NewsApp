@@ -4,6 +4,9 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
+/**
+ * Get saved history state.
+ */
 const history = computed({
     get: () => store.get('content/history'),
 });

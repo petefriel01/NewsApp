@@ -21,11 +21,17 @@ const props = defineProps({
     },
 });
 
+/**
+ * Getter/Setter for textfield value.
+ */
 const inputVal = computed({
     get: () => props.title,
     set: (value) => emit('update:modelValue', value),
 });
 
+/**
+ * Watch dialog visiblity.
+ */
 watch(() => props.visible, (selection) => {
     dialog.value = selection;
 });

@@ -1,11 +1,12 @@
 <script setup>
-
 const emit = defineEmits(['item-clicked', 'update:modelValue']);
 
+/**
+ * Emit search query text.
+ */
 const handleInput = (e) => {
     emit('update:modelValue', e.target.value);
 };
-
 </script>
 <template>
     <v-text-field

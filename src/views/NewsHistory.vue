@@ -18,7 +18,9 @@ onBeforeMount(async () => {
     await store
         .dispatch('content/getNewsArticle', { article })
         .then((response) => {
-            store.dispatch('content/setActiveStory', response[0]);
+            if (response) {
+                store.dispatch('content/setActiveStory', response[0]);
+            }
         });
 });
 

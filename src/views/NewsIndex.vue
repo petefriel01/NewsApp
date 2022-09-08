@@ -19,6 +19,7 @@ const isMaxLength = ref(false);
 const searchText = ref();
 const sources = ref();
 const loading = ref(false);
+const active = ref(false);
 const error = computed(() => store.get('content/error'));
 
 /**
@@ -134,12 +135,17 @@ const showError = async () => {
         .dispatch('content/getNewsError')
         .then(() => {
             newsList.value = [];
+            active.value = true;
             loading.value = false;
         });
 };
 
-onBeforeMount(async () => {
-    store.set('content/source', '');
+/**
+ * Returns list of news headlines.
+ *
+ * @return {array}
+ */
+const getHeadlines = async () => {
     loading.value = true;
     await store
         .dispatch('content/getNewsHeadlines')
@@ -147,6 +153,11 @@ onBeforeMount(async () => {
             newsList.value = response;
             loading.value = false;
         });
+};
+
+onBeforeMount(async () => {
+    store.set('content/source', '');
+    getHeadlines();
     getSourceList();
 });
 </script>
@@ -184,7 +195,8 @@ onBeforeMount(async () => {
             </v-col>
         </v-row>
         <v-divider class="my-8"></v-divider>
-        <v-alert type="warning" v-if="error">
+        <v-alert type="warning"
+                 v-if="active" v-click-outside="onErrorOutside" @click="active = true">
             {{error}}
         </v-alert>
         <v-row v-if="newsList">

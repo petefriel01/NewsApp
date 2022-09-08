@@ -12,7 +12,6 @@ const {
 } = useRoute();
 
 onBeforeMount(async () => {
-    console.log(article);
     if (article) {
         await store
             .dispatch('content/getNewsArticle', { article, filter: store.get('content/source') })
