@@ -22,9 +22,14 @@ watch(
     <v-app-bar app class="bg-white" elevation="0">
         <v-container>
             <div class="d-flex flex-row">
-                <h1 class="text-h3 font-weight-black text-center"
-                    v-if="headlines">NEWS<span class="text-grey">TODAY</span>
-                </h1>
+                <router-link
+                    v-if="headlines"
+                    to="/"
+                    class="text-decoration-none mx-auto mr-sm-auto ml-sm-0">
+                    <h1 class="text-h3 font-weight-black text-black text-center"
+                    >NEWS<span class="text-grey">TODAY</span>
+                    </h1>
+                </router-link>
                 <v-btn :to="{name: 'NewsIndex'}" v-else>Back</v-btn>
             </div>
         </v-container>

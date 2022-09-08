@@ -10,7 +10,6 @@ const AppModal = defineAsyncComponent(() => import('@/components/AppModal.vue'))
 const AppSpinner = defineAsyncComponent(() => import('@/components/AppSpinner.vue'));
 const NewsCard = defineAsyncComponent(() => import('@/components/NewsCard.vue'));
 const SearchWidget = defineAsyncComponent(() => import('@/components/SearchWidget.vue'));
-
 const store = useStore();
 const newsList = ref([]);
 const isVisible = ref(false);
@@ -20,9 +19,40 @@ const isMaxLength = ref(false);
 const searchText = ref();
 const sources = ref();
 const loading = ref(false);
-
 const error = computed(() => store.get('content/error'));
 
+/**
+ * Catch emitted search text from SearchWidget
+ */
+const handleSearch = (value) => {
+    searchText.value = value;
+};
+
+/**
+ * Close dialog action
+ */
+const closeDialog = () => {
+    isVisible.value = !isVisible.value;
+};
+
+/**
+ * Controls dialog UI actions
+ *
+ * @param {string} title new title st
+ * @param {number} index id of new article to edit
+ */
+const handleDialog = ({ title, index }) => {
+    isVisible.value = !isVisible.value;
+    newsTitle.value = title;
+    newsTitleId.value = index;
+    isMaxLength.value = false;
+};
+
+/**
+ * Returns list of new sources for ddl.
+ *
+ * @return {array}
+ */
 const getSourceList = async () => {
     await store
         .dispatch('content/getNewsSources')
@@ -31,6 +61,12 @@ const getSourceList = async () => {
         });
 };
 
+/**
+ * Returns news articles by news source.
+ *
+ * @param {string} source new source id
+ * @return {array} all new stories by id
+ */
 const filterHeadlines = async (source) => {
     loading.value = true;
     await store
@@ -41,27 +77,12 @@ const filterHeadlines = async (source) => {
         });
 };
 
-const showError = async () => {
-    loading.value = true;
-    await store
-        .dispatch('content/getNewsError')
-        .then(() => {
-            newsList.value = [];
-            loading.value = false;
-        });
-};
-
-const handleDialog = ({ title, index }) => {
-    isVisible.value = !isVisible.value;
-    newsTitle.value = title;
-    newsTitleId.value = index;
-    isMaxLength.value = false;
-};
-
-const closeDialog = () => {
-    isVisible.value = !isVisible.value;
-};
-
+/**
+ * Handles inline title edit
+ *
+ * @param {string} newTitle new title as per edit
+ * @return {string} updated title
+ */
 const updateTitle = (newTitle) => {
     if (newTitle.length > 255) {
         isMaxLength.value = true;
@@ -77,17 +98,18 @@ const updateTitle = (newTitle) => {
     });
 };
 
-const handleSearch = (value) => {
-    searchText.value = value;
-};
-
+/**
+ * Watch search query to execute new search.
+ *
+ * @param {string} searchText the search query text
+ * @return {array} news list of matched articles
+ */
 watch(
     () => searchText.value,
     debounce(async (query) => {
         if (!searchText.value) return;
         try {
             loading.value = true;
-            console.log(query);
             await store
                 .dispatch('content/getNewsBySearch', { query })
                 .then((response) => {
@@ -100,6 +122,21 @@ watch(
     }, 1000),
 );
 
+/**
+ * Returns error from erroneous api call.
+ *
+ * @return {array} axios error.
+ */
+const showError = async () => {
+    loading.value = true;
+    await store
+        .dispatch('content/getNewsError')
+        .then(() => {
+            newsList.value = [];
+            loading.value = false;
+        });
+};
+
 onBeforeMount(async () => {
     loading.value = true;
     await store
@@ -111,17 +148,16 @@ onBeforeMount(async () => {
     getSourceList();
 });
 </script>
-
 <template>
     <OneColumn>
-        <v-row class="d-flex align-center dev">
-            <v-col>
-                <h2 class="text-h4 dev">Headlines</h2>
+        <v-row class="d-flex align-center">
+            <v-col cols="12" xs="12" lg="4">
+                <h2 class="text-h4">Headlines</h2>
             </v-col>
-            <v-col class="d-flex align-center dev">
+            <v-col cols="12" xs="12" lg="4"  class="d-flex align-center">
                 <SearchWidget @update:model-value="handleSearch"/>
             </v-col>
-            <v-col class="d-flex justify-end">
+            <v-col  cols="12" xs="12" lg="4" class="d-flex justify-end">
                 <v-menu>
                     <template v-slot:activator="{ props }">
                         <v-btn
@@ -153,8 +189,7 @@ onBeforeMount(async () => {
             <v-col
                 v-for="(news, index) in newsList"
                 :key="`news-list-${index}`"
-                cols="1"
-                sm="3"
+                cols="12" xs="12" sm="6" md="4" lg="3"
             >
                 <NewsCard
                     :v-if="news.urlToImage"
@@ -177,9 +212,3 @@ onBeforeMount(async () => {
         @update:model-value="updateTitle"
         :title="newsTitle"/>
 </template>
-
-<style scoped>
-/* .dev{
-    border: solid 1px red;
-} */
-</style>
