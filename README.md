@@ -1,5 +1,10 @@
 # newsapp
 
+### .env
+```
+Please ensure to add valid NEWSAPI key to .env file
+```
+
 ## Project setup
 ```
 npm install
@@ -15,10 +20,7 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
+### Run Vitest
 ```
-npm run lint
+npm run test 
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
