@@ -22,21 +22,21 @@ const loading = ref(false);
 const error = computed(() => store.get('content/error'));
 
 /**
- * Catch emitted search text from SearchWidget
+ * Catch emitted search text from SearchWidget.
  */
 const handleSearch = (value) => {
     searchText.value = value;
 };
 
 /**
- * Close dialog action
+ * Close dialog action.
  */
 const closeDialog = () => {
     isVisible.value = !isVisible.value;
 };
 
 /**
- * Controls dialog UI actions
+ * Controls dialog UI actions.
  *
  * @param {string} title new title st
  * @param {number} index id of new article to edit
@@ -73,12 +73,13 @@ const filterHeadlines = async (source) => {
         .dispatch('content/getNewsBySource', { source })
         .then((response) => {
             newsList.value = response;
+            store.set('content/source', source);
             loading.value = false;
         });
 };
 
 /**
- * Handles inline title edit
+ * Handles inline title edit.
  *
  * @param {string} newTitle new title as per edit
  * @return {string} updated title
@@ -138,6 +139,7 @@ const showError = async () => {
 };
 
 onBeforeMount(async () => {
+    store.set('content/source', '');
     loading.value = true;
     await store
         .dispatch('content/getNewsHeadlines')

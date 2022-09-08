@@ -33,6 +33,9 @@ const props = defineProps({
     },
 });
 
+/**
+ * Get title for live editing
+ */
 const dynamicTitle = computed({
     get: () => props.title,
 });

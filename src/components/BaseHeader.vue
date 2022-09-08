@@ -5,6 +5,9 @@ import { useRoute } from 'vue-router';
 const headlines = ref();
 const route = useRoute();
 
+/**
+ * Watch route meta data to show/hide logo
+ */
 watch(
     () => route.meta?.showLogo,
     async (metaLayout) => {
@@ -16,7 +19,6 @@ watch(
     },
     { immediate: true },
 );
-
 </script>
 <template>
     <v-app-bar app class="bg-white" elevation="0">
