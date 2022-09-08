@@ -23,7 +23,6 @@ onBeforeMount(async () => {
             }
         });
 });
-
 </script>
 <template>
     <OneColumn>

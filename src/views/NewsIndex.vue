@@ -19,7 +19,7 @@ const isMaxLength = ref(false);
 const searchText = ref();
 const sources = ref();
 const loading = ref(false);
-const active = ref(false);
+const isError = ref(false);
 const error = computed(() => store.get('content/error'));
 
 /**
@@ -35,6 +35,13 @@ const handleSearch = (value) => {
 const closeDialog = () => {
     isVisible.value = !isVisible.value;
 };
+
+const showArticleAlert = computed(() => {
+    if (!isError.value && !loading.value) {
+        return true;
+    }
+    return false;
+});
 
 /**
  * Controls dialog UI actions.
@@ -109,7 +116,6 @@ const updateTitle = (newTitle) => {
 watch(
     () => searchText.value,
     debounce(async (query) => {
-        if (!searchText.value) return;
         try {
             loading.value = true;
             await store
@@ -135,7 +141,7 @@ const showError = async () => {
         .dispatch('content/getNewsError')
         .then(() => {
             newsList.value = [];
-            active.value = true;
+            isError.value = true;
             loading.value = false;
         });
 };
@@ -155,7 +161,16 @@ const getHeadlines = async () => {
         });
 };
 
+/**
+ * Handle error alert close on clickoutside.
+ */
+const onErrorOutside = () => {
+    isError.value = !isError.value;
+    getHeadlines();
+};
+
 onBeforeMount(async () => {
+    console.log('on before mount');
     store.set('content/source', '');
     getHeadlines();
     getSourceList();
@@ -196,10 +211,12 @@ onBeforeMount(async () => {
         </v-row>
         <v-divider class="my-8"></v-divider>
         <v-alert type="warning"
-                 v-if="active" v-click-outside="onErrorOutside" @click="active = true">
+                 v-if="isError"
+                 v-click-outside="onErrorOutside"
+                 @click="isError = true">
             {{error}}
         </v-alert>
-        <v-row v-if="newsList">
+        <v-row v-if="newsList.length > 0">
             <v-col
                 v-for="(news, index) in newsList"
                 :key="`news-list-${index}`"
@@ -217,6 +234,10 @@ onBeforeMount(async () => {
                 />
             </v-col>
         </v-row>
+        <div v-else-if="showArticleAlert"
+             class="d-flex justify-center align-center my-16 py-16">
+            <p class="font-weight-bold">NO ARTCLES FOUND.</p>
+        </div>
     </OneColumn>
     <AppSpinner v-if="loading"/>
     <AppModal
@@ -226,3 +247,8 @@ onBeforeMount(async () => {
         @update:model-value="updateTitle"
         :title="newsTitle"/>
 </template>
+<style>
+.dev{
+    border: solid 1px red;;
+}
+</style>
