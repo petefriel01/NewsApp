@@ -1,4 +1,11 @@
-# newsapp
+![Screenshot](screenshot.png)
+
+# NEWSAPP
+
+Daily News Portal.
+
+Vue3.js + Vuetify + Vuelidate + Vitest 
+
 
 ### .env
 ```
